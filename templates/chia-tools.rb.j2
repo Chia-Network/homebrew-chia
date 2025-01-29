@@ -1,0 +1,27 @@
+class ChiaTools < Formula
+  desc "Collection of CLI tools for working with Chia Blockchain"
+  homepage "https://github.com/chia-network/chia-tools"
+  version "{{ VERSION }}"
+  license "Apache-2.0"
+
+  on_macos do
+    on_intel do
+      url "{{ MAC_AMD64_URL }}"
+      sha256 "{{ MAC_AMD64_HASH }}"
+
+      def install
+        bin.install "chia-tools"
+        prefix.install_metafiles
+      end
+    end
+    on_arm do
+      url "{{ MAC_ARM64_URL }}"
+      sha256 "{{ MAC_ARM64_HASH }}"
+
+      def install
+        bin.install "chia-tools"
+        prefix.install_metafiles
+      end
+    end
+  end
+end
