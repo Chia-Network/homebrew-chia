@@ -32,7 +32,7 @@ jobs:
           MAC_AMD64_HASH=$(sha256sum chia-tools-darwin-amd64.zip | awk '{print $1}')
           MAC_ARM64_HASH=$(sha256sum chia-tools-darwin-arm64.zip | awk '{print $1}')
           echo "MAC_AMD64_HASH=${MAC_AMD64_HASH}" >> $GITHUB_ENV
-          echo "MAC_ARM64_HASH=${MAC_AMD64_HASH}" >> $GITHUB_ENV
+          echo "MAC_ARM64_HASH=${MAC_ARM64_HASH}" >> $GITHUB_ENV
 
       - name: Template the chia-tools formula with updated values
         run:
