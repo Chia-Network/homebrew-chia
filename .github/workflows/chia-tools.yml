@@ -3,7 +3,7 @@ name: Chia Tools Release
 on:
   workflow_dispatch:
     inputs:
-      version:
+      release_version:
         description: "The version of chia-tools to update to"
         required: true
 
@@ -12,9 +12,9 @@ permissions:
   contents: write
 
 env:
-  VERSION: ${{ inputs.version }}
-  MAC_AMD64_URL: https://github.com/Chia-Network/chia-tools/releases/download/${{ inputs.version }}/chia-tools-darwin-amd64.zip
-  MAC_ARM64_URL: https://github.com/Chia-Network/chia-tools/releases/download/${{ inputs.version }}/chia-tools-darwin-arm64.zip
+  VERSION: ${{ inputs.release_version }}
+  MAC_AMD64_URL: https://github.com/Chia-Network/chia-tools/releases/download/${{ inputs.release_version }}/chia-tools-darwin-amd64.zip
+  MAC_ARM64_URL: https://github.com/Chia-Network/chia-tools/releases/download/${{ inputs.release_version }}/chia-tools-darwin-arm64.zip
 
 jobs:
   update_formula:
@@ -47,5 +47,5 @@ jobs:
       - name: Commit updated config
         run: |
           git status
-          ( git commit chia-tools.tb -m "Updating chia-tools to version ${{ inputs.version }}" && git push origin main ) || true
+          ( git commit chia-tools.tb -m "Updating chia-tools to version ${{ inputs.release_version }}" && git push origin main ) || true
           git status
