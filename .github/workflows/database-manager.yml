@@ -50,5 +50,5 @@ jobs:
       - name: Commit updated config
         run: |
           git status
-          ( git commit database-manager.rb -m "Updating database-manager to version ${{ inputs.release_version }}" && git push origin main ) || true
+          ( git add database-manager.rb && git commit -m "Updating database-manager to version ${{ inputs.release_version }}" && git push origin main ) || true
           git status
