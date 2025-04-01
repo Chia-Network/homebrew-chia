@@ -1,0 +1,54 @@
+name: Database Manager Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: "The version of database-manager to update to"
+        required: true
+
+permissions:
+  id-token: write
+  contents: write
+
+env:
+  VERSION: ${{ inputs.release_version }}
+  MAC_AMD64_URL: https://github.com/Chia-Network/database-manager/releases/download/${{ inputs.release_version }}/database-manager-darwin-amd64.zip
+  MAC_ARM64_URL: https://github.com/Chia-Network/database-manager/releases/download/${{ inputs.release_version }}/database-manager-darwin-arm64.zip
+
+jobs:
+  update_formula:
+    runs-on: ubuntu-latest
+    container: ghcr.io/chia-network/build-images/ips:main
+    steps:
+      - name: Add safe Git directory
+        uses: Chia-Network/actions/git-mark-workspace-safe@main
+
+      - uses: actions/checkout@v4
+        with:
+          token: '${{ secrets.REPO_COMMIT }}'
+
+      - name: Get latest database-manager hashes
+        run: |
+          wget "${MAC_AMD64_URL}"
+          wget "${MAC_ARM64_URL}"
+          MAC_AMD64_HASH=$(sha256sum database-manager-darwin-amd64.zip | awk '{print $1}')
+          MAC_ARM64_HASH=$(sha256sum database-manager-darwin-arm64.zip | awk '{print $1}')
+          echo "MAC_AMD64_HASH=${MAC_AMD64_HASH}" >> $GITHUB_ENV
+          echo "MAC_ARM64_HASH=${MAC_ARM64_HASH}" >> $GITHUB_ENV
+
+      - name: Template the database-manager formula with updated values
+        run:
+          j2 ./templates/database-manager.rb.j2 -o ./database-manager.rb
+
+      - name: Set up commit signing
+        uses: Chia-Network/actions/commit-sign/gpg@main
+        with:
+          gpg_private_key: ${{ secrets.CHIA_AUTOMATION_PRIVATE_GPG_KEY }}
+          passphrase: ${{ secrets.CHIA_AUTOMATION_PRIVATE_GPG_PASSPHRASE }}
+
+      - name: Commit updated config
+        run: |
+          git status
+          ( git commit database-manager.rb -m "Updating database-manager to version ${{ inputs.release_version }}" && git push origin main ) || true
+          git status
