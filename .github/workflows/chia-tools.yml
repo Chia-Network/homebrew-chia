@@ -50,5 +50,5 @@ jobs:
       - name: Commit updated config
         run: |
           git status
-          ( git commit chia-tools.rb -m "Updating chia-tools to version ${{ inputs.release_version }}" && git push origin main ) || true
+          ( git add chia-tools.rb && git commit -m "Updating chia-tools to version ${{ inputs.release_version }}" && git push origin main ) || true
           git status
