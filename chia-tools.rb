@@ -1,13 +1,13 @@
 class ChiaTools < Formula
   desc "Collection of CLI tools for working with Chia Blockchain"
   homepage "https://github.com/chia-network/chia-tools"
-  version "1.3.8"
+  version "1.3.9"
   license "Apache-2.0"
 
   on_macos do
     on_intel do
-      url "https://github.com/Chia-Network/chia-tools/releases/download/1.3.8/chia-tools-darwin-amd64.zip"
-      sha256 "cd1d124625b377c6063e8732ca07b2a8000bdb4099934e5b92396b888f6da0e9"
+      url "https://github.com/Chia-Network/chia-tools/releases/download/1.3.9/chia-tools-darwin-amd64.zip"
+      sha256 "44b5d3ef3e041bdee1c551228721e8ace5b7df50a18303d268cced6f3c0e1995"
 
       def install
         bin.install "chia-tools"
@@ -15,8 +15,8 @@ class ChiaTools < Formula
       end
     end
     on_arm do
-      url "https://github.com/Chia-Network/chia-tools/releases/download/1.3.8/chia-tools-darwin-arm64.zip"
-      sha256 "1d677197804a8514455a03d198c00e6bd85f345eb99b0f380690eb65577e26c8"
+      url "https://github.com/Chia-Network/chia-tools/releases/download/1.3.9/chia-tools-darwin-arm64.zip"
+      sha256 "a7e8f45e05f5595461dc9435da463c2bfed18f237c65b4647b4827ffb8adb5c6"
 
       def install
         bin.install "chia-tools"
