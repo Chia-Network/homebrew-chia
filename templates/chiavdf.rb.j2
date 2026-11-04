@@ -12,8 +12,8 @@ class Chiavdf < Formula
       sha256 "{{ MAC_AMD64_HASH }}"
 
       def install
-        bundle_root = Dir["chiavdf-*-macos-*"].first
-        odie "Unable to locate extracted chiavdf bundle root" if bundle_root.nil?
+        # Homebrew strips the single top-level directory of the zip, so the bundle is usually the current directory.
+        bundle_root = Dir["chiavdf-*-macos-*"].find { |dir| File.directory?(dir) } || "."
         bin.install Dir["#{bundle_root}/bin/*"]
         (libexec/"chiavdf").install Dir["#{bundle_root}/libexec/chiavdf/*"]
         prefix.install_metafiles
@@ -24,8 +24,8 @@ class Chiavdf < Formula
       sha256 "{{ MAC_ARM64_HASH }}"
 
       def install
-        bundle_root = Dir["chiavdf-*-macos-*"].first
-        odie "Unable to locate extracted chiavdf bundle root" if bundle_root.nil?
+        # Homebrew strips the single top-level directory of the zip, so the bundle is usually the current directory.
+        bundle_root = Dir["chiavdf-*-macos-*"].find { |dir| File.directory?(dir) } || "."
         bin.install Dir["#{bundle_root}/bin/*"]
         (libexec/"chiavdf").install Dir["#{bundle_root}/libexec/chiavdf/*"]
         prefix.install_metafiles
