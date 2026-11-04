@@ -5,12 +5,10 @@ class Chiavdf < Formula
 
   depends_on :macos
 
-  on_arm do
+  if Hardware::CPU.arm?
     url "https://github.com/Chia-Network/chiavdf/releases/download/1.2.2/chiavdf-darwin-arm64.zip"
     sha256 "0cbcd3daebf0706d302bb4992f70248b229ed0e839dd83c8f115736b7a53d86e"
-  end
-
-  on_intel do
+  else
     url "https://github.com/Chia-Network/chiavdf/releases/download/1.2.2/chiavdf-darwin-amd64.zip"
     sha256 "8c176b0f083384ec4255e19e34ecfed44e0f7ac93c08d70de7ff8bfd73397828"
   end
