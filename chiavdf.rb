@@ -1,16 +1,8 @@
 class Chiavdf < Formula
   desc "VDF client binaries for hardware and software"
   homepage "https://github.com/Chia-Network/chiavdf"
-  version "1.2.2"
   license "Apache-2.0"
 
-  # The release bundle ships Developer ID signed dylibs that use @rpath install names.
-  # Homebrew rewrites and ad-hoc re-signs dylibs whose install names it changes, which drops
-  # the Team ID that library validation requires for hw_vdf_client. preserve_rpath leaves the
-  # @rpath install names, and therefore the signatures, untouched.
-  preserve_rpath
-
-  depends_on "gmp"
   depends_on :macos
 
   on_arm do
@@ -23,12 +15,14 @@ class Chiavdf < Formula
     sha256 "8c176b0f083384ec4255e19e34ecfed44e0f7ac93c08d70de7ff8bfd73397828"
   end
 
+  # Bundled binaries are Developer ID signed (Team JVJ6QQB8PJ) with hardened runtime, so
+  # library validation rejects any dylib Homebrew rewrites and ad-hoc re-signs. Every dylib ID
+  # and load is @rpath or a system path and the only rpath is @loader_path, so with
+  # preserve_rpath Homebrew modifies (and re-signs) nothing. Keep the release bundle that way.
+  preserve_rpath
+
   def install
-    # Homebrew strips the single top-level directory of the zip, so the bundle is usually the current directory.
-    bundle_root = Dir["chiavdf-*-macos-*"].find { |dir| File.directory?(dir) } || "."
-    bin.install Dir["#{bundle_root}/bin/*"]
-    (libexec/"chiavdf").install Dir["#{bundle_root}/libexec/chiavdf/*"]
-    prefix.install_metafiles
+    prefix.install "bin", "libexec"
   end
 
   test do
