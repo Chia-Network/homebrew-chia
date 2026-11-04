@@ -4,32 +4,37 @@ class Chiavdf < Formula
   version "{{ VERSION }}"
   license "Apache-2.0"
 
+  # The release bundle ships Developer ID signed dylibs that use @rpath install names.
+  # Homebrew rewrites and ad-hoc re-signs dylibs whose install names it changes, which drops
+  # the Team ID that library validation requires for hw_vdf_client. preserve_rpath leaves the
+  # @rpath install names, and therefore the signatures, untouched.
+  preserve_rpath
+
   depends_on "gmp"
+  depends_on :macos
 
-  on_macos do
-    on_intel do
-      url "{{ MAC_AMD64_URL }}"
-      sha256 "{{ MAC_AMD64_HASH }}"
+  on_arm do
+    url "{{ MAC_ARM64_URL }}"
+    sha256 "{{ MAC_ARM64_HASH }}"
+  end
 
-      def install
-        # Homebrew strips the single top-level directory of the zip, so the bundle is usually the current directory.
-        bundle_root = Dir["chiavdf-*-macos-*"].find { |dir| File.directory?(dir) } || "."
-        bin.install Dir["#{bundle_root}/bin/*"]
-        (libexec/"chiavdf").install Dir["#{bundle_root}/libexec/chiavdf/*"]
-        prefix.install_metafiles
-      end
-    end
-    on_arm do
-      url "{{ MAC_ARM64_URL }}"
-      sha256 "{{ MAC_ARM64_HASH }}"
+  on_intel do
+    url "{{ MAC_AMD64_URL }}"
+    sha256 "{{ MAC_AMD64_HASH }}"
+  end
 
-      def install
-        # Homebrew strips the single top-level directory of the zip, so the bundle is usually the current directory.
-        bundle_root = Dir["chiavdf-*-macos-*"].find { |dir| File.directory?(dir) } || "."
-        bin.install Dir["#{bundle_root}/bin/*"]
-        (libexec/"chiavdf").install Dir["#{bundle_root}/libexec/chiavdf/*"]
-        prefix.install_metafiles
-      end
-    end
+  def install
+    # Homebrew strips the single top-level directory of the zip, so the bundle is usually the current directory.
+    bundle_root = Dir["chiavdf-*-macos-*"].find { |dir| File.directory?(dir) } || "."
+    bin.install Dir["#{bundle_root}/bin/*"]
+    (libexec/"chiavdf").install Dir["#{bundle_root}/libexec/chiavdf/*"]
+    prefix.install_metafiles
+  end
+
+  test do
+    assert_match version.to_s, shell_output("#{bin}/vdf_client --version")
+    assert_match version.to_s, shell_output("#{bin}/hw_vdf_client --version")
+    assert_match "Usage:", shell_output("#{bin}/vdf_client 2>&1", 1)
+    assert_match "Usage:", shell_output("#{bin}/hw_vdf_client --bogus 2>&1", 1)
   end
 end
