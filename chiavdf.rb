@@ -6,11 +6,11 @@ class Chiavdf < Formula
   depends_on :macos
 
   if Hardware::CPU.arm?
-    url "https://github.com/Chia-Network/chiavdf/releases/download/1.2.2/chiavdf-darwin-arm64.zip"
-    sha256 "0cbcd3daebf0706d302bb4992f70248b229ed0e839dd83c8f115736b7a53d86e"
+    url "https://github.com/Chia-Network/chiavdf/releases/download/1.2.3/chiavdf-darwin-arm64.zip"
+    sha256 "095b33466c97392e30efb20d7e09980dba826268c9a64b8b5f98e6c14fcdd1e9"
   else
-    url "https://github.com/Chia-Network/chiavdf/releases/download/1.2.2/chiavdf-darwin-amd64.zip"
-    sha256 "8c176b0f083384ec4255e19e34ecfed44e0f7ac93c08d70de7ff8bfd73397828"
+    url "https://github.com/Chia-Network/chiavdf/releases/download/1.2.3/chiavdf-darwin-amd64.zip"
+    sha256 "35e97512d092be577d3b34a8f3f88274f6db98c1ad7ca2685d76b7699eea97f0"
   end
 
   # Bundled binaries are Developer ID signed (Team JVJ6QQB8PJ) with hardened runtime, so
